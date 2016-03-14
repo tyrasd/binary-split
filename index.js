@@ -8,11 +8,11 @@ function BinarySplit (matcher) {
   matcher = Buffer(matcher || os.EOL)
   var buffered
   var bufcount = 0
+  var offset = 0
   return through(write, end)
 
   function write (buf, enc, done) {
     bufcount++
-    var offset = 0
 
     if (buffered) {
       buf = Buffer.concat([buffered, buf])
@@ -36,6 +36,7 @@ function BinarySplit (matcher) {
       } else {
         if (offset >= buf.length) {
           buffered = undefined
+          offset = 0
         } else {
           buffered = buf
         }
