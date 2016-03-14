@@ -21,25 +21,13 @@ function BinarySplit (matcher) {
 
     while (buf) {
       var idx = firstMatch(buf, offset)
-      if (idx) {
-        var line = buf.slice(offset, idx)
-        if (idx === buf.length) {
-          buffered = line
-          buf = undefined
-          offset = idx
-        } else {
-          this.push(line)
-          offset = idx + matcher.length
-        }
-      } else if (idx === 0) {
-        buf = buf.slice(offset + matcher.length)
+      if (typeof idx === 'number' && idx < buf.length) {
+        this.push(buf.slice(0, idx))
+        buf = buf.slice(idx + matcher.length)
+        offset = 0
       } else {
-        if (offset >= buf.length) {
-          buffered = undefined
-          offset = 0
-        } else {
-          buffered = buf
-        }
+        buffered = buf
+        offset = buf.length
         buf = undefined
       }
     }
